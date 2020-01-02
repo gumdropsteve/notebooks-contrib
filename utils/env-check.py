@@ -10,14 +10,18 @@ pynvml.nvmlInit()
 handle = pynvml.nvmlDeviceGetHandleByIndex(0)
 device_name = pynvml.nvmlDeviceGetName(handle)
 
-if (device_name == b'Tesla T4') or (device_name == b'Tesla P100-PCIE-16GB'):
+# were we issued a RAPIDS compatible GPU?
+if (device_name == b'Tesla T4') or (device_name == b'Tesla P100-PCIE-16GB') or (device_name == b'Tesla P4'):
   print('***********************************************************************')
   print('Woo! Your instance has the right kind of GPU, a '+ str(device_name)[1:]+'!')
   print('***********************************************************************')
   print()
+# not given (known possible) RAPIDS compatible GPU
 else:
-  raise Exception("""
+  raise Exception(f"""
     Unfortunately Colab didn't give you a T4 or P100 GPU.
+    
+    GPU = {device_name}
     
     Make sure you've configured Colab to request a GPU instance type.
     
